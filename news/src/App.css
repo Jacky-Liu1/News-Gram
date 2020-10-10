@@ -1,0 +1,119 @@
+body {
+  background-color: #e6e6e8;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  background-color: #FFFFFF;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.organization {
+  display: flex;
+  font-size: 24px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
+
+.organization-logo {
+  margin-right: 10px;
+}
+
+.organization-name {
+  font-style: cursive;
+}
+
+.user-auth {
+  display: flex;
+  margin-right: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.sign-in {
+  margin-right: 20px;
+  background-color: #ffffff;
+  color: #0079D3;
+  border-color: #0079D3;
+  border-radius: 5px; 
+  padding: 10px 20px; 
+  cursor: pointer;
+}
+
+.sign-in:hover {
+  background-color: #5abaed;
+}
+
+.sign-up {
+  font: 12px;
+  background-color: #0079D3;
+  color: #ffffff;
+  border-radius: 5px; 
+  padding: 10px 20px; 
+  border-color: #0079D3;
+  cursor: pointer;
+}
+
+.sign-up:hover {
+  background-color: #dbdbdb;
+}
+
+.post-sheet {
+  flex-direction: column;
+  display: flex;
+}
+
+.create-post {
+  background-color: #ffffff;
+  display: flex;
+  align-items:center;   
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+ .post-icon {
+  margin-left: auto;
+  margin-right: 7px;
+}
+
+.create-post-button{
+  margin-right: auto;
+  border: 1px solid lightgray;
+}
+
+.modal{
+  margin: 100px 375px;
+}
+
+.post-sheet{
+  margin: 30px;
+}
+
+.post-title{
+  border: 1px solid lightgray;
+  padding: 5px;
+}
+
+.post-picUrl {
+  margin-top: 10px;
+  padding: 5px;
+  border: 1px solid lightgray;
+}
+
+.post-description{
+  margin-top: 15px;
+  margin-bottom: 25px;
+  padding: 5px;
+  border: 1px solid lightgray;
+}
+
+.post-button {
+  margin: auto auto;
+  border: 1px solid lightgray;
+}
+

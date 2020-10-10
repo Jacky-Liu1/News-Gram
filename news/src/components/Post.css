@@ -1,0 +1,93 @@
+.card-content {
+  max-width: 450px;
+  border: 1px solid lightgray;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right:auto;
+  
+}
+
+.post-header {
+  display: flex;
+  margin-bottom: 5px;
+  align-items:center; 
+  
+}
+
+.post-avatar {
+  margin-right: 10px;
+}
+
+.username {
+  font-size: 18px;
+}
+
+.post-title {
+  margin-bottom: 5px;
+}
+.post-pic {
+  width: 100%;
+  object-fit: contain;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.post-footer {
+ display: flex;
+ align-items:center;    
+ margin-top: 5px;
+ margin-bottom: 5px;
+}
+
+.up-arrow {
+  margin-right: 3px;
+  cursor:pointer;
+}
+
+.up-arrow-green {
+  margin-right: 3px;
+  color: #28a682;
+  cursor:pointer;
+}
+
+.up-arrow:hover {
+  color: #3bebb9;
+  cursor: pointer;
+}
+
+.down-arrow {
+  margin-left: 3px;
+  margin-right: 10px;
+  cursor:pointer;
+}
+
+.down-arrow-red {
+  color: #9c3827;
+  margin-left: 3px;
+  margin-right: 10px;
+  cursor:pointer;
+}
+
+.down-arrow:hover {
+  color: #de5037;
+  cursor: pointer;
+}
+
+.message-icon {
+  margin-right: 5px;
+  cursor:pointer;
+}
+
+.message-icon:hover {
+  color: #dbdbdb;
+  cursor: pointer;
+}
+
+.description {
+  margin-bottom: 8px;
+}
+
+.date-posted {
+  font-size: 12px;;
+}
