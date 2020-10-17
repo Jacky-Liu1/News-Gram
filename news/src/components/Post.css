@@ -25,6 +25,8 @@
 
 .post-title {
   margin-bottom: 5px;
+  border: 0px !important; 
+  
 }
 .post-pic {
   width: 100%;

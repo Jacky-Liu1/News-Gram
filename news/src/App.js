@@ -14,7 +14,7 @@ function App() {
   const [picUrl, setPicUrl] = useState('');
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
-  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(null);
 
@@ -34,20 +34,25 @@ function App() {
 
   function handlePost() {
 
+    const postData = {
+      "title": title,
+      "picUrl": picUrl,
+      "upvotes": 0,
+      "downvotes": 0,
+      "comments": [],
+      "description": description,
+      "date": Date.now()
+    }
 
-    /*
-    TODO!!!!!!!!!!  
-    description -> textarea
-    handlePost function which should send to database on submit
-    children props -> parent props
-    */
-
-
-
-
-
-
-
+    return fetch('http://localhost:9000/NewsGram/posts/api/123456', {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(res => res.json())
+      .then(data => console.log(data));
 
   }
 
@@ -80,12 +85,14 @@ function App() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                required
               />
               <Input className="post-picUrl"
                 placeholder='picture url'
                 type="url"
                 value={picUrl}
                 onChange={(e) => setPicUrl(e.target.value)}
+                required
               />
               <Input className="post-description"
                 placeholder="description(optional)"
