@@ -22,6 +22,7 @@ function App() {
 
   const [posts, setPosts] = useState([]);  // every post
 
+  // fetch post
   useEffect(() => {
     async function fetchPosts() {
       const posts = await fetch('http://localhost:9000/NewsGram/posts/api/123456')
@@ -32,8 +33,9 @@ function App() {
     fetchPosts();
   }, [])
 
-  function handlePost() {
 
+  // post 
+  function handlePost() {
     const postData = {
       "title": title,
       "picUrl": picUrl,
@@ -44,6 +46,7 @@ function App() {
       "date": Date.now()
     }
 
+    //sends post to this url?
     return fetch('http://localhost:9000/NewsGram/posts/api/123456', {
       method: 'POST',
       body: JSON.stringify(postData),
@@ -55,6 +58,25 @@ function App() {
       .then(data => console.log(data));
 
   }
+
+  // update upvotes
+  function updateUpvotes() {
+    setUpvotes(upvotes + 1)
+    return fetch('http://localhost:9000/NewsGram/posts/api/123456', {
+      method: 'UPDATE',
+      body: JSON.stringify(upvotes),
+      header: {
+        'Content-Type': 'application/json'
+      },
+    })
+  }
+
+  //handle downvotes
+  function updateDownvotes() {
+
+  }
+
+
 
   return (
     <div className="App">
@@ -130,10 +152,12 @@ function App() {
       {
         posts.map(post => (
           <Post
-            key={post.id}
+            key={post._id}
             username={post.username}
             title={post.title}
             picUrl={post.picUrl}
+            updateUpvotes={updateUpvotes}
+            updateDownvotes={updateDownvotes}
             upvotes={post.upvotes}
             downvotes={post.downvotes}
             comments={post.comments}

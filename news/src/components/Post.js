@@ -35,19 +35,15 @@ function Post(props) {
         <img className="post-pic" src={props.picUrl} alt=""></img>
 
         {/* Upvote -> downvote -> comment (include counts) */}
+
         <div className='post-footer'>
-          <ArrowUpwardIcon className={upvoted ? "up-arrow-green" : "up-arrow"} onClick={(e) => {
-            setUpvoted(!upvoted)  // invert boolean   
-            setDownvoted(false)
-            //upvoted ? setUpvotes(upvotes - 1) : setUpvotes(upvotes + 1)
-          }}
+          <ArrowUpwardIcon className={upvoted ? "up-arrow-green" : "up-arrow"}
+            onClick={props.updateUpvotes}
           />
           {upvotes - downvotes}
-          <ArrowDownwardIcon className={downvoted ? "down-arrow-red" : "down-arrow"} onClick={(e) => {
-            setDownvoted(!downvoted)  // invert boolean
-            setUpvoted(false)
-            //downvoted ? setDownvotes(downvotes - 1) : setDownvotes(downvotes + 1)
-          }} />
+          <ArrowDownwardIcon className={downvoted ? "down-arrow-red" : "down-arrow"}
+            onClick={props.updateDownvotes}
+          />
           <MessageIcon className="message-icon" />
           <p>{props.commentCount} comments</p>
         </div>
@@ -65,3 +61,20 @@ function Post(props) {
 }
 
 export default Post
+
+/*
+
+<ArrowUpwardIcon className={upvoted ? "up-arrow-green" : "up-arrow"} onClick={(e) => {
+            setUpvoted(!upvoted)  // invert boolean
+            setDownvoted(false)
+            //upvoted ? setUpvotes(upvotes - 1) : setUpvotes(upvotes + 1)
+          }}
+          />
+          {upvotes - downvotes}
+          <ArrowDownwardIcon className={downvoted ? "down-arrow-red" : "down-arrow"} onClick={(e) => {
+            setDownvoted(!downvoted)  // invert boolean
+            setUpvoted(false)
+            //downvoted ? setDownvotes(downvotes - 1) : setDownvotes(downvotes + 1)
+          }} />
+
+*/

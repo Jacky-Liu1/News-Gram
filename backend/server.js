@@ -12,6 +12,15 @@ require('dotenv').config({ DB_URL: 'DB_URL' });
 const app = express();
 const port = process.env.PORT || 9000
 
+// Real-time
+const pusher = new Pusher({
+  appId: '1086794',
+  key: '6254f7eca7cde94bcdb7',
+  secret: '2b44f9769cfea682dd37',
+  cluster: 'us2',
+  usetls: true
+});
+
 
 // middlewares
 app.use(express.json());
@@ -32,8 +41,31 @@ mongoose.connect(connectionUrl, {
   useUnifiedTopology: true
 })
 
+
+
 mongoose.connection.once('open', () => {
   console.log("Database connected")
+  const changeStream = mongoose.connection.collection('schemas').watch()
+  // when databases changes(Pusher) do this ....
+  changeStream.on('change', (change) => {
+    console.log("change triggered on pusher")
+    console.log(change)
+    if (change.operationType === 'insert') {
+      const postDetails = change.fullDocument;
+      pusher.trigger('posts', 'inserted', {
+        title: postDetails.title,
+        picUrl: postDetails.picUrl,
+        upvotes: postDetails.upvotes,
+        downvotes: postDetails.downvotes,
+        comments: postDetails.comments,
+        description: postDetails.description,
+        date: postDetails.date
+      })
+    }
+    else {
+      console.log("Unknown trigger from Pusher")
+    }
+  })
 })
 
 // endpoints
@@ -52,7 +84,6 @@ app.get('/NewsGram/posts/api/123456', (req, res) => {
     err ? res.status(500).send(err) : res.status(200).send(data)
   })
   */
-
   schema.find((err, data) => {
     err ? res.status(500).send(err) : res.status(200).send(data)
   })
@@ -68,7 +99,6 @@ app.post('/NewsGram/posts/api/123456', (req, res) => {  // sends post to databas
     err ? res.status(500).send(err) : res.status(201).send(data);
   })
   */
-
   const body = req.body
   schema.create(body, (err, data) => {
     err ? res.status(500).send(err) : res.status(201).send(data);
