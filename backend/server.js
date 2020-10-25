@@ -6,7 +6,7 @@ const Pusher = require('pusher');
 const dummyData = require('./dummyData');
 const schema = require('./model');
 
-require('dotenv').config({ DB_URL: 'DB_URL' });
+require('dotenv').config({ DB_URL: 'DB_URL', PUSHER_APPID: 'PUSHER_APPID', PUSHER_KEY: 'PUSHER_KEY', PUSHER_SECRET: 'PUSHER_SECRET' });
 
 // config 
 const app = express();
@@ -14,9 +14,9 @@ const port = process.env.PORT || 9000
 
 // Real-time
 const pusher = new Pusher({
-  appId: '1086794',
-  key: '6254f7eca7cde94bcdb7',
-  secret: '2b44f9769cfea682dd37',
+  appId: PUSHER_APPID,
+  key: PUSHER_KEY,
+  secret: PUSHER_SECRET,
   cluster: 'us2',
   usetls: true
 });
