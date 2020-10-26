@@ -6,7 +6,7 @@ const Pusher = require('pusher');
 const dummyData = require('./dummyData');
 const schema = require('./model');
 
-require('dotenv').config({ DB_URL: 'DB_URL', PUSHER_APPID: 'PUSHER_APPID', PUSHER_KEY: 'PUSHER_KEY', PUSHER_SECRET: 'PUSHER_SECRET' });
+require('dotenv').config();
 
 // config 
 const app = express();
@@ -14,9 +14,9 @@ const port = process.env.PORT || 9000
 
 // Real-time
 const pusher = new Pusher({
-  appId: PUSHER_APPID,
-  key: PUSHER_KEY,
-  secret: PUSHER_SECRET,
+  appId: process.env.PUSHER_APPID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
   cluster: 'us2',
   usetls: true
 });
@@ -104,6 +104,14 @@ app.post('/NewsGram/posts/api/123456', (req, res) => {  // sends post to databas
     err ? res.status(500).send(err) : res.status(201).send(data);
   })
 });
+
+
+
+app.put('/NewsGram/posts/api/123456', (req, res) => {
+
+})
+
+
 
 // listen 
 app.listen(port, () => console.log(`Server started on port ${port}`));
