@@ -6,6 +6,8 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 import { Card, CardContent } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
+import Pusher from 'pusher-js';
+import * as tf from '@tensorflow/tfjs';
 
 
 function App() {
@@ -22,6 +24,48 @@ function App() {
 
   const [posts, setPosts] = useState([]);  // every post
 
+
+
+  // tensorflow js stuff
+  const [metadata, setMetadata] = useState({});
+  const [model, setModel] = useState(null);
+
+  const url = {
+    model: 'https://storage.googleapis.com/tfjs-models/tfjs/sentiment_cnn_v1/model.json',
+    metadata: 'https://storage.googleapis.com/tfjs-models/tfjs/sentiment_cnn_v1/metadata.json'
+  };
+  async function loadModel(url) {
+    try {
+      const model = await tf.loadLayersModel(url.model);
+      setModel(model);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+  async function loadMetadata(url) {
+    try {
+      const metadataJson = await fetch(url.metadata);
+      /* const metadata = await metadataJson.json(); */
+      setMetadata(metadataJson.json());
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    loadModel(url)
+    loadMetadata(url)
+    /*
+    tf.ready().then(() => {
+      loadModel(url)
+      loadMetadata(url)
+    });
+    */
+  }, [])
+
+
   // fetch post
   useEffect(() => {
     async function fetchPosts() {
@@ -32,6 +76,70 @@ function App() {
     }
     fetchPosts();
   }, [])
+
+  // Pusher
+  useEffect(() => {
+    const pusher = new Pusher('6254f7eca7cde94bcdb7', {
+      cluster: 'us2'
+    });
+
+    const channel = pusher.subscribe('posts');
+    channel.bind('inserted', function (newPost) {
+      const metadata = fetch("https://storage.googleapis.com/tfjs-models/tfjs/sentiment_cnn_v1/metadata.json").
+        then((res) => res.json())
+        .then((data) => {
+          return data;
+        })
+      console.log("reach psuher")
+      console.log(model);
+      console.log(metadata);
+      const inputText = newPost.description.trim().toLowerCase().replace(/(\.|\,|\!)/g, '').split(' ');
+      const OOV_INDEX = 2;
+      const sequence = inputText.map(word => {
+        console.log("test");
+        console.log(word);
+        console.log(metadata)
+        console.log(metadata.word_index["grandeur"]);
+        let wordIndex = metadata.word_index[word] + metadata.index_from;
+        console.log(wordIndex);
+        if (wordIndex > metadata.vocabulary_size) {
+          wordIndex = OOV_INDEX;
+        }
+        return wordIndex;
+      });
+      const PAD_INDEX = 0;
+      const padSequences = (sequences, maxLen, padding = 'pre', truncating = 'pre', value = PAD_INDEX) => {
+        return sequences.map(seq => {
+          if (seq.length > maxLen) {
+            if (truncating === 'pre') {
+              seq.splice(0, seq.length - maxLen);
+            } else {
+              seq.splice(maxLen, seq.length - maxLen);
+            }
+          }
+          if (seq.length < maxLen) {
+            const pad = [];
+            for (let i = 0; i < maxLen - seq.length; ++i) {
+              pad.push(value);
+            }
+            if (padding === 'pre') {
+              seq = pad.concat(seq);
+            } else {
+              seq = seq.concat(pad);
+            }
+          }
+          return seq;
+        });
+      }
+      const paddedSequence = padSequences([sequence], metadata.max_len);
+      const input = tf.tensor2d(paddedSequence, [1, metadata.max_len]);
+      const predictOut = model.predict(input);
+      const score = predictOut.dataSync()[0];
+      console.log(score);
+      predictOut.dispose();
+      setPosts([...posts, newPost])
+    })
+  }, [posts])
 
 
   // post 
@@ -45,7 +153,6 @@ function App() {
       "description": description,
       "date": Date.now()
     }
-
     //sends post to this url?
     return fetch('http://localhost:9000/NewsGram/posts/api/123456', {
       method: 'POST',
@@ -61,10 +168,16 @@ function App() {
 
   // update upvotes
   function updateUpvotes() {
+    console.log("before", upvotes)
     setUpvotes(upvotes + 1)
+    console.log("after", upvotes)
+    const updateData = {
+      "upvotes": upvotes,
+      "test": "testing put"
+    }
     return fetch('http://localhost:9000/NewsGram/posts/api/123456', {
-      method: 'UPDATE',
-      body: JSON.stringify(upvotes),
+      method: 'PUT',
+      body: JSON.stringify(updateData),
       header: {
         'Content-Type': 'application/json'
       },

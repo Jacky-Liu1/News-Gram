@@ -107,8 +107,21 @@ app.post('/NewsGram/posts/api/123456', (req, res) => {  // sends post to databas
 
 
 
-app.put('/NewsGram/posts/api/123456', (req, res) => {
-
+app.put('/NewsGram/posts/api/123456/:id', (req, res) => {
+  console.log(req.body)
+  var id = req.id;
+  id = _.extend(id, req.body)
+  id.save((err) => {
+    if (err) {
+      return res.send('/id', {
+        errors: err.errors,
+        id: id
+      });
+    }
+    else {
+      res.jsonp(id)
+    }
+  })
 })
 
 
