@@ -6,18 +6,6 @@ Run:
 npm start
 nodemon server.js
 
-
-installation:
-npm install @material-ui/core
-npm install @material-ui/icons
-npm install express mongoose
-npm i -g nodemon
-npm i cors pusher 
-npm i image-file-to-base64-exif
-npm i pusher-js (frontend)
-
-
-
 Todo:
     update/delete request
     required post
